@@ -10,6 +10,7 @@ import (
 func main() {
 	commanderInstance := commander.NewCommander(version.AppName, version.Version, version.AppName+" is a template.")
 	commanderInstance.RegisterSubcommand("push", "Push code.", command.NewPushCommand())
+	commanderInstance.RegisterSubcommand("tag", "Tag code.", command.NewTagCommand())
 	err := commanderInstance.Run()
 	if err != nil {
 		go_logger.Logger.Error(err)
