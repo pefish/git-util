@@ -2,5 +2,5 @@ package version
 
 const (
 	AppName = "git-util"
-	Version = "v0.0.7"
+	Version = "v0.0.8"
 )

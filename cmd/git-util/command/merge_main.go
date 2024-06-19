@@ -54,8 +54,8 @@ set -euxo pipefail
 git config pull.rebase false
 
 git add .
-git commit -m "%s"
 git pull
+git commit -m "%s"
 git push
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)

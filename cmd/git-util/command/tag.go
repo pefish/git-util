@@ -74,8 +74,8 @@ set -euxo pipefail
 
 git config pull.rebase false
 git add .
-git commit -m "%s"
 git pull
+git commit -m "%s"
 git push
 git tag -a "%s" -m "%s"
 git push origin "%s"
