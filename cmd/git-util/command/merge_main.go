@@ -50,14 +50,17 @@ func (dc *MergeMainCommand) Start(command *commander.Commander) error {
 		`
 #!/bin/bash
 set -euxo pipefail
+
+git config pull.rebase false
+
 git add .
 git commit -m "%s"
+git pull
 git push
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
 git checkout main
-git config pull.rebase false
 
 git merge ${current_branch}
 git pull

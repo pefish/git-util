@@ -59,8 +59,13 @@ func (dc *PushCommand) Start(command *commander.Commander) error {
 		`
 #!/bin/bash
 set -euxo pipefail
+
+git config pull.rebase false
+
 git add .
 git commit -m "%s"
+
+git pull
 git push
 `,
 		comment,

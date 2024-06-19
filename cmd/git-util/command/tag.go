@@ -71,8 +71,11 @@ func (dc *TagCommand) Start(command *commander.Commander) error {
 		`
 #!/bin/bash
 set -euxo pipefail
+
+git config pull.rebase false
 git add .
 git commit -m "%s"
+git pull
 git push
 git tag -a "%s" -m "%s"
 git push origin "%s"
