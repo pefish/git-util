@@ -19,6 +19,11 @@ func main() {
 		Args:       nil,
 		Subcommand: command.NewTagCommand(),
 	})
+	commanderInstance.RegisterSubcommand("merge-main", &commander.SubcommandInfo{
+		Desc:       "Merge current branch to main branch.",
+		Args:       nil,
+		Subcommand: command.NewMergeMainCommand(),
+	})
 	err := commanderInstance.Run()
 	if err != nil {
 		go_logger.Logger.Error(err)

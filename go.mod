@@ -3,7 +3,7 @@ module github.com/pefish/git-util
 go 1.20
 
 require (
-	github.com/pefish/go-commander v0.7.3
+	github.com/pefish/go-commander v0.7.4
 	github.com/pefish/go-config v0.4.6
 	github.com/pefish/go-logger v0.5.6
 )
