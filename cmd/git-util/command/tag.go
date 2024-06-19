@@ -6,6 +6,8 @@ import (
 	"os/exec"
 
 	"github.com/pefish/go-commander"
+	go_logger "github.com/pefish/go-logger"
+	go_prompt "github.com/pefish/go-prompt"
 )
 
 type TagCommand struct {
@@ -41,6 +43,30 @@ func (dc *TagCommand) OnExited(command *commander.Commander) error {
 }
 
 func (dc *TagCommand) Start(command *commander.Commander) error {
+	comment, isExit := go_prompt.PromptInstance.Input(
+		"Please input comment.",
+		nil,
+	)
+	if isExit {
+		return nil
+	}
+	if comment == "" {
+		go_logger.Logger.InfoFRaw("Error: required 'comment' not specified.")
+		return nil
+	}
+
+	tag, isExit := go_prompt.PromptInstance.Input(
+		"Please input tag.",
+		nil,
+	)
+	if isExit {
+		return nil
+	}
+	if tag == "" {
+		go_logger.Logger.InfoFRaw("Error: required 'tag' not specified.")
+		return nil
+	}
+
 	script := fmt.Sprintf(
 		`
 #!/bin/bash
@@ -51,10 +77,10 @@ git push
 git tag -a "%s" -m "%s"
 git push origin "%s"
 `,
-		os.Args[3],
-		os.Args[2],
-		os.Args[3],
-		os.Args[2],
+		comment,
+		tag,
+		comment,
+		tag,
 	)
 	cmd := exec.Command("bash", "-c", script)
 	cmd.Stdout = os.Stdout

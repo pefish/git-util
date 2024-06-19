@@ -51,7 +51,7 @@ func (dc *PushCommand) Start(command *commander.Commander) error {
 		return nil
 	}
 	if comment == "" {
-		go_logger.Logger.InfoFRaw("Error: required option '--type [string]' not specified.")
+		go_logger.Logger.InfoFRaw("Error: required 'comment' not specified.")
 		return nil
 	}
 
