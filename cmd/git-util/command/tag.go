@@ -1,14 +1,11 @@
 package command
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 
-	"github.com/pefish/git-util/pkg/global"
 	"github.com/pefish/go-commander"
-	go_config "github.com/pefish/go-config"
 )
 
 type TagCommand struct {
@@ -18,24 +15,32 @@ func NewTagCommand() *TagCommand {
 	return &TagCommand{}
 }
 
-func (dc *TagCommand) DecorateFlagSet(flagSet *flag.FlagSet) error {
+type TagCommandConfigType struct {
+}
+
+type TagCommandDataType struct {
+}
+
+var TagCommandConfig TagCommandConfigType
+var TagCommandData TagCommandDataType
+
+func (dc *TagCommand) Init(command *commander.Commander) error {
 	return nil
 }
 
-func (dc *TagCommand) Init(data *commander.StartData) error {
-	err := go_config.ConfigManagerInstance.Unmarshal(&global.GlobalConfig)
-	if err != nil {
-		return err
-	}
+func (dc *TagCommand) Config() interface{} {
+	return &TagCommandConfig
+}
 
+func (dc *TagCommand) Data() interface{} {
+	return &TagCommandData
+}
+
+func (dc *TagCommand) OnExited(command *commander.Commander) error {
 	return nil
 }
 
-func (dc *TagCommand) OnExited(data *commander.StartData) error {
-	return nil
-}
-
-func (dc *TagCommand) Start(data *commander.StartData) error {
+func (dc *TagCommand) Start(command *commander.Commander) error {
 	script := fmt.Sprintf(
 		`
 #!/bin/bash

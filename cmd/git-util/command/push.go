@@ -1,41 +1,60 @@
 package command
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 
-	"github.com/pefish/git-util/pkg/global"
 	"github.com/pefish/go-commander"
-	go_config "github.com/pefish/go-config"
+	go_logger "github.com/pefish/go-logger"
+	go_prompt "github.com/pefish/go-prompt"
 )
 
 type PushCommand struct {
 }
 
+type PushCommandConfigType struct {
+}
+
+type PushCommandDataType struct {
+}
+
+var PushCommandConfig PushCommandConfigType
+var PushCommandData PushCommandDataType
+
 func NewPushCommand() *PushCommand {
 	return &PushCommand{}
 }
 
-func (dc *PushCommand) DecorateFlagSet(flagSet *flag.FlagSet) error {
+func (dc *PushCommand) Config() interface{} {
+	return &PushCommandConfig
+}
+
+func (dc *PushCommand) Data() interface{} {
+	return &PushCommandData
+}
+
+func (dc *PushCommand) Init(command *commander.Commander) error {
 	return nil
 }
 
-func (dc *PushCommand) Init(data *commander.StartData) error {
-	err := go_config.ConfigManagerInstance.Unmarshal(&global.GlobalConfig)
-	if err != nil {
-		return err
+func (dc *PushCommand) OnExited(command *commander.Commander) error {
+	return nil
+}
+
+func (dc *PushCommand) Start(command *commander.Commander) error {
+	comment, isExit := go_prompt.PromptInstance.Input(
+		"Please input comment.",
+		nil,
+	)
+	if isExit {
+		return nil
+	}
+	if comment == "" {
+		go_logger.Logger.InfoFRaw("Error: required option '--type [string]' not specified.")
+		return nil
 	}
 
-	return nil
-}
-
-func (dc *PushCommand) OnExited(data *commander.StartData) error {
-	return nil
-}
-
-func (dc *PushCommand) Start(data *commander.StartData) error {
 	script := fmt.Sprintf(
 		`
 #!/bin/bash
@@ -44,7 +63,7 @@ git add .
 git commit -m "%s"
 git push
 `,
-		os.Args[2],
+		comment,
 	)
 	cmd := exec.Command("bash", "-c", script)
 	cmd.Stdout = os.Stdout
